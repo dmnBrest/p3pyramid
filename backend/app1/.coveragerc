@@ -1,0 +1,3 @@
+[run]
+source = app1
+omit = app1/test*
