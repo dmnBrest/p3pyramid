@@ -1,0 +1,35 @@
+version: '3'
+services:
+  web:
+    build: ./backend
+    command: pserve app1/development.ini --reload
+    environment:
+      DATABASE_URL: postgres://postgres:1234@db/postgres
+    ports:
+    - 6543:6543
+    volumes:
+    - ./backend:/code
+#    depends_on:
+#    - db
+#    - mailcatcher
+  # frontend:
+  #   build: ./frontend
+  #   command: npm start
+  #   volumes:
+  #   - ./frontend:/code
+  #   - ./backend/static/apps:/dist
+#  db:
+#    image: postgres:9.6
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 1234
+#    volumes:
+#    - ./temp/db:/var/lib/postgresql/data
+#    ports:
+#    - 5432:5432
+#  mailcatcher:
+#    image: schickling/mailcatcher
+#    ports:
+#    - 1080:1080
+
+
