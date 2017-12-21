@@ -1,0 +1,3 @@
+pip install cookiecutter
+
+/root/.local/bin/cookiecutter gh:Pylons/pyramid-cookiecutter-alchemy
