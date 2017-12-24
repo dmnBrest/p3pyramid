@@ -1,0 +1,113 @@
+{% extends '../layout.jinja2' %}
+
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-route.min.js"></script>
+
+    <h1>BLOG</h1>
+
+    {% raw %}
+    <div ng-app="BlogApp" ng-controller="AppController as ctrl" ng-cloak="true">
+
+        <div ng-if="ctrl.mode == 'list'">
+            <div ng-repeat="post in ctrl.posts">
+                <a href="#!/{{ post.slug }}">{{ post.title }}</a>
+            </div>
+        </div>
+
+    </div>
+    {% endraw %}
+
+    <script>
+         window.app = angular.module('BlogApp', ['ngRoute'])
+             .factory('RemoteService', [ '$q', '$rootScope', '$filter', '$timeout', '$http', function ($q, $rootScope, $filter, $timeout, $http) {
+				var f = this;
+
+				f.getPosts = function() {
+				    return f.remoteCall('GET', '/api/v0/post');
+                }
+
+				f.remoteCall = function(method, url) {
+					return $http({
+                        method: method,
+                        url: url
+                        }).then(function successCallback(response) {
+                            console.log(response);
+                            if (response.data) {
+                                return response.data;
+                            }
+                            return response;
+                        }, function errorCallback(response) {
+                            console.error(response);
+                            return response;
+
+                        }
+                    );
+				};
+
+				return f;
+			}])
+            .controller('AppController', ['$scope', '$rootScope', '$timeout', '$location', 'RemoteService', function($scope, $rootScope, $timeout, $location, RemoteService) {
+                var ctrl = this;
+
+                ctrl.name = 'DOOM';
+
+                ctrl.mode = 'list';
+                ctrl.posts = [];
+                ctrl.selectedPosts = null;
+
+                // Router
+                $scope.$watch(function() {
+                    return $location.path();
+                }, function(value) {
+                    console.log(value);
+                    var re = /\/([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})$/g;
+                    if (value) {
+                        var res = value.match(re);
+                        console.log(res);
+                        if (res && res.length === 1) {
+                            alert('get post by slug');
+                        } else {
+                            $location.path('/');
+                            ctrl.getPosts();
+                        }
+                    } else {
+                        ctrl.getPosts();
+                    }
+                });
+
+                ctrl.getPosts = function() {
+                    RemoteService.getPosts().then(
+                        function success(data) {
+                            ctrl.posts = data.posts;
+                        },
+                        function error() {
+                            console.log('ERROR');
+                        }
+                    );
+                };
+
+                ctrl.getPostBySlug = function(slug) {
+                    /*
+                    RemoteService.getPostBySlug(slug).then(
+                        function success(data) {
+                            ctrl.selectedPost = data.post;
+                        },
+                        function error() {
+                            console.log('ERROR');
+                        }
+                    );
+                    */
+                };
+
+                $timeout(function(){
+
+                })
+
+            }]);
+    </script>
+
+{% endblock content %}

@@ -11,7 +11,7 @@ services:
     - ./backend:/code
     depends_on:
     - db
-#    - mailcatcher
+    - mailcatcher
   # frontend:
   #   build: ./frontend
   #   command: npm start
@@ -27,9 +27,9 @@ services:
     - ./temp/db:/var/lib/postgresql/data
     ports:
     - 5432:5432
-#  mailcatcher:
-#    image: schickling/mailcatcher
-#    ports:
-#    - 1080:1080
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+    - 1080:1080
 
 

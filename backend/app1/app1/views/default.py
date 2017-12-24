@@ -3,17 +3,45 @@ from pyramid.view import view_config
 
 from sqlalchemy.exc import DBAPIError
 
-from ..models import MyModel
+from pyramid.httpexceptions import (
+    HTTPForbidden,
+    HTTPFound,
+    HTTPNotFound,
+)
 
+import logging
+log = logging.getLogger(__name__)
 
 @view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
 def my_view(request):
     try:
-        query = request.dbsession.query(MyModel)
-        one = query.filter(MyModel.name == 'one').first()
+
+        # query = request.dbsession.query(MyModel)
+        # one = query.filter(MyModel.name == 'one').first()
+
+        user = request.user
+        log.debug('current user:')
+        log.debug(user)
+        # if user is None or (user.role != 'editor' and page.creator != user):
+        #     raise HTTPForbidden
+        # if user is None or user.role not in ('editor', 'basic'):
+        #     raise HTTPForbidden
+
+        request.session.flash('mymessageX')
+
+        if 'counter' in request.session:
+            request.session['counter'] += 1
+        else:
+            request.session['counter'] = 0
+
+        log.debug(request.session['counter'])
+
+        log.debug(request.session.peek_flash())
+
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'one': one, 'project': 'app1'}
+
+    return {}
 
 
 db_err_msg = """\

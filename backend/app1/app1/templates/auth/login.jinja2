@@ -1,0 +1,44 @@
+{% extends '../layout.jinja2' %}
+
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+
+    <style>
+        .c-auth-box-wrapper {
+            margin-top: 60px;
+        }
+    </style>
+
+    <div class="slds-grid slds-grid_align-center c-auth-box-wrapper">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+            <div class="slds-box c-auth-box">
+                <p>
+                <strong>
+                    Login
+                </strong><br>
+                {{ message }}
+                </p>
+                <form action="{{ url }}" method="post">
+                    <input type="hidden" name="next" value="{{ next_url }}">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="username">Username</label>
+                        <div class="slds-form-element__control">
+                            <input type="text" id="username" class="slds-input" name="login" value="{{ login }}" />
+                        </div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="password">Username</label>
+                        <div class="slds-form-element__control">
+                            <input id="password" class="slds-input" type="password" name="password" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" name="form.submitted" value="Log In" class="slds-button slds-button_brand">Log In</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,76 @@
+/* inspiration http://webapplayers.com/inspinia_admin-v2.7.1/ */
+
+html, body {
+    /*font-family: 'Roboto', sans-serif;*/
+    background-color: #F3F3F4;
+    font-weight: 300;
+    font-size: 14px;
+	margin: 0;
+	padding: 0;
+}
+h1 {
+	font-size: 24px;
+}
+h1, h2, h3, h4, h5 {
+    margin: 0;
+    font-weight: 300;
+}
+.c-hidden {
+    display: none;
+}
+.c-right {
+	text-align: right;
+}
+
+html {
+	height: 100%;
+}
+body {
+	min-height: 100%;
+}
+.c-container {
+	min-height: 100%;
+	position: relative;
+}
+.c-header {
+	padding: 10px;
+}
+.c-sub-header {
+	padding: 5px 10px;
+	background-color: #fff;
+}
+.c-content {
+	padding-bottom: 40px; /* Height of the footer */
+}
+
+.c-footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 40px; /* Height of the footer */
+	background-color: #fff;
+	padding: 10px;
+	text-align: center
+}
+
+.c-site-title {
+	font-size: 20px;
+	vertical-align: middle;
+}
+
+.c-logo {
+	height: 40px;
+	display: inline-block;
+	padding-right: 10px;
+}
+.c-logo-link {
+	display: inline-block;
+	color: #3e3e3c;
+}
+.c-logo-link:hover {
+	color: #3e3e3c;
+	text-decoration: none;
+}
+.slds-form-element {
+	margin-bottom: 10px;
+}
