@@ -13,7 +13,7 @@ from ..helpers import RenderSchema
 class CommentRenderSchema(RenderSchema):
 
     class Meta:
-        additional = ('id', 'content', 'user_id', 'post_id')
+        additional = ('id', 'content', 'user_id', 'post_id', 'user')
 
 class Comment(Base):
     """ The SQLAlchemy declarative model class for a Page object. """

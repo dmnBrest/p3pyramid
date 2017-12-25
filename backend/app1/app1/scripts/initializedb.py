@@ -49,11 +49,17 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
 
-        editor = User(username='doom1', email='doom1@doom1.com', role='editor')
+        editor = User(
+            username='doom1',
+            email='doom1@doom1.com',
+            role='editor',)
         editor.set_password('doom1')
         dbsession.add(editor)
 
-        basic = User(username='doom2', email='doom2@doom2.com', role='basic')
+        basic = User(
+            username='doom2',
+            email='doom2@doom2.com',
+            role='basic')
         basic.set_password('doom2')
         dbsession.add(basic)
 

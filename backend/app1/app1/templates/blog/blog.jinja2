@@ -7,19 +7,53 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-route.min.js"></script>
 
-    <h1>BLOG</h1>
+    <style>
+        h2 {
+            font-size: 34px;
+        }
 
-    {% raw %}
-    <div ng-app="BlogApp" ng-controller="AppController as ctrl" ng-cloak="true">
+        h3 {
+            font-size: 24px;
+        }
+        .c-post-item {
+            padding-bottom: 15px;
+        }
+        .c-post-body {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+    </style>
 
-        <div ng-if="ctrl.mode == 'list'">
-            <div ng-repeat="post in ctrl.posts">
-                <a href="#!/{{ post.slug }}">{{ post.title }}</a>
+    <div style="padding: 20px;">
+        <h1>BLOG</h1>
+        <br />
+        {% raw %}
+        <div ng-app="BlogApp" ng-controller="AppController as ctrl" ng-cloak="true">
+
+            <div ng-if="ctrl.mode == 'list'">
+                <div ng-repeat="post in ctrl.posts" class="c-post-item">
+                    <a href="#!/{{ post.slug }}">{{ post.title }}</a><br />
+                    by {{ post.user.username }} at {{ post.created_at | date : 'short' }}
+                </div>
             </div>
-        </div>
+            <div ng-if="ctrl.mode == 'view'">
+                <div><a href="#!/">&lt;back</a></div>
+                <div>
+                    <h2>{{ ctrl.selectedPost.title }}</h2>
+                    <div class="c-post-body">{{ ctrl.selectedPost.content }}</div>
+                    <div>posted by <b>{{ ctrl.selectedPost.user.username }}</b> at {{ ctrl.selectedPost.created_at | date : 'short' }}</div>
+                </div>
+                <div style="padding-top: 30px;">
+                    <h3>Comments</h3>
+                    <div ng-repeat="comment in ctrl.selectedPost.comments" class="c-comment-item">
+                        "{{ comment.content }}" by <b>{{ comment.user.username }}</b>
+                    </div>
+                </div>
+            </div>
 
+        </div>
+        {% endraw %}
     </div>
-    {% endraw %}
 
     <script>
          window.app = angular.module('BlogApp', ['ngRoute'])
@@ -28,6 +62,10 @@
 
 				f.getPosts = function() {
 				    return f.remoteCall('GET', '/api/v0/post');
+                }
+
+                f.getPostBySlug = function(slug) {
+				    return f.remoteCall('GET', '/api/v0/post/'+slug);
                 }
 
 				f.remoteCall = function(method, url) {
@@ -66,23 +104,24 @@
                     console.log(value);
                     var re = /\/([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})$/g;
                     if (value) {
-                        var res = value.match(re);
+                        var res = re.exec(value);
                         console.log(res);
-                        if (res && res.length === 1) {
-                            alert('get post by slug');
+                        if (res && res.length === 2) {
+                            ctrl.showPost(res[1])
                         } else {
                             $location.path('/');
-                            ctrl.getPosts();
+                            ctrl.showPosts();
                         }
                     } else {
-                        ctrl.getPosts();
+                        ctrl.showPosts();
                     }
                 });
 
-                ctrl.getPosts = function() {
+                ctrl.showPosts = function() {
                     RemoteService.getPosts().then(
                         function success(data) {
                             ctrl.posts = data.posts;
+                            ctrl.mode = 'list';
                         },
                         function error() {
                             console.log('ERROR');
@@ -90,17 +129,16 @@
                     );
                 };
 
-                ctrl.getPostBySlug = function(slug) {
-                    /*
-                    RemoteService.getPostBySlug(slug).then(
+                ctrl.showPost = function(slug) {
+                    return RemoteService.getPostBySlug(slug).then(
                         function success(data) {
                             ctrl.selectedPost = data.post;
+                            ctrl.mode = 'view';
                         },
                         function error() {
                             console.log('ERROR');
                         }
                     );
-                    */
                 };
 
                 $timeout(function(){

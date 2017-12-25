@@ -4,6 +4,11 @@ import decimal
 from marshmallow import Schema, fields
 from pyramid.renderers import JSON
 
+def date_handler(obj):
+    if hasattr(obj, 'isoformat'):
+        return obj.isoformat()
+    else:
+        raise TypeError
 
 def create_json_renderer():
     """
